@@ -1,0 +1,45 @@
+pricing:
+  premium: 300
+  suv: 150
+  small: 50
+spring:
+  profiles:
+    default: postgres  # default to postgres now
+
+---
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/carrental
+    username: carrental
+    password: carrental
+  jpa:
+    hibernate:
+      ddl-auto: validate   # schema from Flyway, not Hibernate
+    properties:
+      hibernate.jdbc.time_zone: UTC
+    open-in-view: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    schemas: public
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev-h2
+  datasource:
+    url: jdbc:h2:mem:carrental;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  flyway:
+    enabled: false
+
